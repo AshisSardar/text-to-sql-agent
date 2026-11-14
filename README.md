@@ -4,6 +4,20 @@ Ask a business question in plain English, for example *"Which products had the b
 
 Built with Python, LangGraph, LangChain, PostgreSQL and Streamlit.
 
+## Screenshots
+
+**A business question answered in plain language, with the result table**
+
+![Answer to "Which products had the biggest drop in revenue last week compared to the week before?"](docs/screenshots/answer.png)
+
+**The SQL the agent wrote is always shown**
+
+![Total revenue per store, with the generated SQL expanded](docs/screenshots/sql.png)
+
+**Asking it to delete data**: no write reaches the database. Only a harmless `SELECT` was run (here after 2 attempts).
+
+![The request "Try to delete all orders" is blocked](docs/screenshots/safety.png)
+
 ## How it works
 
 ```
