@@ -1,0 +1,245 @@
+{
+  "summary": {
+    "model": "google_genai/gemini-3.6-flash",
+    "questions_planned": 20,
+    "questions_answered": 20,
+    "skipped_api_errors": 0,
+    "not_run": 0,
+    "correct": 20,
+    "accuracy_pct": 100.0,
+    "by_difficulty": {
+      "easy": "6/6",
+      "medium": "8/8",
+      "hard": "6/6"
+    },
+    "correct_on_first_attempt": 20,
+    "needed_retry": 0,
+    "fixed_by_retry": 0,
+    "agent_gave_up": 0,
+    "avg_seconds": 22.7,
+    "median_seconds": 19.3,
+    "reused_from_earlier_runs": 2
+  },
+  "results": [
+    {
+      "id": 1,
+      "difficulty": "easy",
+      "question": "How many customers are there?",
+      "seconds": 18.9,
+      "status": "done",
+      "sql": "SELECT COUNT(*) AS total_customers\nFROM customers",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 2,
+      "difficulty": "easy",
+      "question": "How many stores are in Kolkata?",
+      "seconds": 14.5,
+      "status": "done",
+      "sql": "SELECT COUNT(*) AS store_count\nFROM stores\nWHERE city = 'Kolkata'",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 3,
+      "difficulty": "easy",
+      "question": "List all products in the Electronics category with their prices.",
+      "seconds": 21.3,
+      "status": "done",
+      "sql": "SELECT product_id, name, price\nFROM products\nWHERE category = 'Electronics'\nLIMIT 50",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 4,
+      "difficulty": "easy",
+      "question": "What is the most expensive product and its price?",
+      "seconds": 11.0,
+      "status": "done",
+      "sql": "SELECT name AS product_name, price\nFROM products\nORDER BY price DESC\nLIMIT 1",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 5,
+      "difficulty": "easy",
+      "question": "How many orders have been placed in total?",
+      "seconds": 10.8,
+      "status": "done",
+      "sql": "SELECT COUNT(*) AS total_orders\nFROM orders",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 6,
+      "difficulty": "easy",
+      "question": "How many customers live in each city?",
+      "seconds": 4.4,
+      "status": "done",
+      "sql": "SELECT\n  city,\n  COUNT(customer_id) AS customer_count\nFROM customers\nGROUP BY\n  city\nORDER BY\n  customer_count DESC,\n  city ASC",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 7,
+      "difficulty": "medium",
+      "question": "What is the total revenue for each store? Show the store name and revenue.",
+      "seconds": 17.2,
+      "status": "done",
+      "sql": "SELECT \n    s.name AS store_name,\n    COALESCE(SUM(o.total_amount), 0) AS total_revenue\nFROM stores s\nLEFT JOIN orders o ON s.store_id = o.store_id\nGROUP BY s.store_id, s.name\nORDER BY total_revenue DESC",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 8,
+      "difficulty": "medium",
+      "question": "Which product category generated the most revenue overall, and how much?",
+      "seconds": 22.8,
+      "status": "done",
+      "sql": "SELECT\n    p.category,\n    SUM(oi.quantity * oi.unit_price) AS total_revenue\nFROM order_items oi\nJOIN products p ON oi.product_id = p.product_id\nGROUP BY p.category\nORDER BY total_revenue DESC\nLIMIT 1",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 9,
+      "difficulty": "medium",
+      "question": "How many orders were placed last week?",
+      "seconds": 72.8,
+      "sql": "SELECT COUNT(*) AS order_count\nFROM orders\nWHERE order_date >= date_trunc('week', DATE '2026-11-12')::date - 7\n  AND order_date < date_trunc('week', DATE '2026-11-12')::date",
+      "attempts": 1,
+      "error": null,
+      "correct": true,
+      "status": "done"
+    },
+    {
+      "id": 10,
+      "difficulty": "medium",
+      "question": "What was the total sales amount last week?",
+      "seconds": 19.7,
+      "status": "done",
+      "sql": "SELECT SUM(total_amount) AS total_sales_amount\nFROM orders\nWHERE order_date >= '2026-11-02' AND order_date <= '2026-11-08'",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 11,
+      "difficulty": "medium",
+      "question": "What is the average order value for each store city?",
+      "seconds": 36.1,
+      "status": "done",
+      "sql": "SELECT\n    s.city AS store_city,\n    AVG(o.total_amount) AS average_order_value\nFROM stores s\nJOIN orders o ON s.store_id = o.store_id\nGROUP BY s.city\nORDER BY average_order_value DESC\nLIMIT 50",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 12,
+      "difficulty": "medium",
+      "question": "Who are the top 5 customers by total spending? Show their name and total spent.",
+      "seconds": 25.5,
+      "status": "done",
+      "sql": "SELECT \n    c.name, \n    SUM(o.total_amount) AS total_spent\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_id, c.name\nORDER BY total_spent DESC\nLIMIT 5",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 13,
+      "difficulty": "medium",
+      "question": "How many units of each product have been sold in total? Show product name and units.",
+      "seconds": 28.9,
+      "status": "done",
+      "sql": "SELECT\n  p.name AS product_name,\n  COALESCE(SUM(oi.quantity), 0) AS total_units_sold\nFROM products p\nLEFT JOIN order_items oi ON p.product_id = oi.product_id\nGROUP BY p.product_id, p.name\nORDER BY total_units_sold DESC",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 14,
+      "difficulty": "medium",
+      "question": "Which store had the most orders last month, and how many?",
+      "seconds": 18.2,
+      "status": "done",
+      "sql": "SELECT \n    s.store_id,\n    s.name AS store_name,\n    COUNT(o.order_id) AS order_count\nFROM stores s\nJOIN orders o ON s.store_id = o.store_id\nWHERE o.order_date >= '2026-10-01' AND o.order_date <= '2026-10-31'\nGROUP BY s.store_id, s.name\nORDER BY order_count DESC\nLIMIT 1",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 15,
+      "difficulty": "hard",
+      "question": "Which 3 products had the biggest drop in revenue last week compared to the week before? Show the product name and the drop amount.",
+      "seconds": 16.4,
+      "sql": "SELECT \n    p.name AS product_name,\n    SUM(CASE WHEN o.order_date BETWEEN '2026-10-26' AND '2026-11-01' THEN oi.quantity * oi.unit_price ELSE 0 END) -\n    SUM(CASE WHEN o.order_date BETWEEN '2026-11-02' AND '2026-11-08' THEN oi.quantity * oi.unit_price ELSE 0 END) AS drop_amount\nFROM products p\nJOIN order_items oi ON p.product_id = oi.product_id\nJOIN orders o ON oi.order_id = o.order_id\nWHERE o.order_date BETWEEN '2026-10-26' AND '2026-11-08'\nGROUP BY p.product_id, p.name\nORDER BY drop_amount DESC\nLIMIT 3",
+      "attempts": 1,
+      "error": null,
+      "correct": true,
+      "status": "done"
+    },
+    {
+      "id": 16,
+      "difficulty": "hard",
+      "question": "What percentage of total revenue does each product category account for? Give percentages rounded to 2 decimals.",
+      "seconds": 29.9,
+      "status": "done",
+      "sql": "SELECT\n    p.category,\n    ROUND(\n        100.0 * SUM(oi.quantity * oi.unit_price) / SUM(SUM(oi.quantity * oi.unit_price)) OVER (),\n        2\n    ) AS revenue_percentage\nFROM order_items oi\nJOIN products p ON oi.product_id = p.product_id\nGROUP BY p.category\nORDER BY revenue_percentage DESC",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 17,
+      "difficulty": "hard",
+      "question": "How many customers have placed more than 15 orders?",
+      "seconds": 14.8,
+      "status": "done",
+      "sql": "SELECT COUNT(*) AS customer_count\nFROM (\n    SELECT customer_id\n    FROM orders\n    GROUP BY customer_id\n    HAVING COUNT(order_id) > 15\n) AS frequent_customers",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 18,
+      "difficulty": "hard",
+      "question": "What was the total revenue for each of the last 4 full calendar weeks? Show the week start date and revenue.",
+      "seconds": 30.9,
+      "status": "done",
+      "sql": "SELECT \n    date_trunc('week', order_date)::date AS week_start_date,\n    SUM(total_amount) AS total_revenue\nFROM orders\nWHERE order_date >= date_trunc('week', DATE '2026-11-13') - INTERVAL '4 weeks'\n  AND order_date < date_trunc('week', DATE '2026-11-13')\nGROUP BY week_start_date\nORDER BY week_start_date ASC",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 19,
+      "difficulty": "hard",
+      "question": "Customers from which city spent the most money last month, and how much?",
+      "seconds": 12.1,
+      "status": "done",
+      "sql": "SELECT \n    c.city,\n    SUM(o.total_amount) AS total_spent\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_date >= '2026-10-01' AND o.order_date <= '2026-10-31'\nGROUP BY c.city\nORDER BY total_spent DESC\nLIMIT 1",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 20,
+      "difficulty": "hard",
+      "question": "What is the best-selling product by units in each category? Show category, product name and units.",
+      "seconds": 27.0,
+      "status": "done",
+      "sql": "WITH ranked_products AS (\n    SELECT \n        p.category,\n        p.name AS product_name,\n        SUM(oi.quantity) AS units,\n        RANK() OVER (PARTITION BY p.category ORDER BY SUM(oi.quantity) DESC) AS rnk\n    FROM products p\n    JOIN order_items oi ON p.product_id = oi.product_id\n    GROUP BY p.category, p.product_id, p.name\n)\nSELECT \n    category,\n    product_name,\n    units\nFROM ranked_products\nWHERE rnk = 1\nORDER BY category",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    }
+  ]
+}

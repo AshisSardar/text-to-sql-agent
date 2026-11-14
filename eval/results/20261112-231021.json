@@ -1,0 +1,40 @@
+{
+  "summary": {
+    "model": "google_genai/gemini-3.6-flash",
+    "questions": 2,
+    "correct": 2,
+    "accuracy_pct": 100.0,
+    "by_difficulty": {
+      "medium": "1/1",
+      "hard": "1/1"
+    },
+    "correct_on_first_attempt": 2,
+    "needed_retry": 0,
+    "fixed_by_retry": 0,
+    "agent_gave_up_or_crashed": 0,
+    "avg_seconds": 44.6,
+    "median_seconds": 44.6
+  },
+  "results": [
+    {
+      "id": 9,
+      "difficulty": "medium",
+      "question": "How many orders were placed last week?",
+      "seconds": 72.8,
+      "sql": "SELECT COUNT(*) AS order_count\nFROM orders\nWHERE order_date >= date_trunc('week', DATE '2026-11-12')::date - 7\n  AND order_date < date_trunc('week', DATE '2026-11-12')::date",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    },
+    {
+      "id": 15,
+      "difficulty": "hard",
+      "question": "Which 3 products had the biggest drop in revenue last week compared to the week before? Show the product name and the drop amount.",
+      "seconds": 16.4,
+      "sql": "SELECT \n    p.name AS product_name,\n    SUM(CASE WHEN o.order_date BETWEEN '2026-10-26' AND '2026-11-01' THEN oi.quantity * oi.unit_price ELSE 0 END) -\n    SUM(CASE WHEN o.order_date BETWEEN '2026-11-02' AND '2026-11-08' THEN oi.quantity * oi.unit_price ELSE 0 END) AS drop_amount\nFROM products p\nJOIN order_items oi ON p.product_id = oi.product_id\nJOIN orders o ON oi.order_id = o.order_id\nWHERE o.order_date BETWEEN '2026-10-26' AND '2026-11-08'\nGROUP BY p.product_id, p.name\nORDER BY drop_amount DESC\nLIMIT 3",
+      "attempts": 1,
+      "error": null,
+      "correct": true
+    }
+  ]
+}
